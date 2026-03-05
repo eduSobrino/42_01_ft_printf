@@ -1,0 +1,104 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/02/09 14:33:18 by esobrino          #+#    #+#              #
+#    Updated: 2026/02/26 23:50:00 by esobrino         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+#------------------------------------------------------------------------------#
+#                                    CONFIG                                    #
+#------------------------------------------------------------------------------#
+
+# Library Name
+NAME = libftprintf.a
+
+# Compilator and flags
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
+
+# Command to linking *.o files and create the *.a library
+AR = ar -rcs
+
+# Command to remove files
+RM = rm -f
+
+#------------------------------------------------------------------------------#
+#                                  DIRECTORIES                                 #
+#------------------------------------------------------------------------------#
+
+# Source Files Directories
+SRC_DIR = src
+
+# Object Files Direrctorie
+OBJ_DIR = obj
+
+# Header Files Directorie
+INC_DIR = .
+
+# libft 
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+#------------------------------------------------------------------------------#
+#                                    SOURCES                                   #
+#------------------------------------------------------------------------------#
+
+# Source files
+SRCS = \
+	$(SRC_DIR)/ft_printf.c \
+	$(SRC_DIR)/handler/printer_c.c \
+	$(SRC_DIR)/handler/printer_di.c \
+	$(SRC_DIR)/handler/printer_p.c \
+	$(SRC_DIR)/handler/printer_s.c \
+	$(SRC_DIR)/handler/printer_selector.c \
+	$(SRC_DIR)/handler/printer_u.c \
+	$(SRC_DIR)/handler/printer_x.c \
+	$(SRC_DIR)/parser/format_parser.c \
+	$(SRC_DIR)/parser/init_format.c \
+	$(SRC_DIR)/utils/utils.c
+ 
+
+# Object files 
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS)) 
+
+#------------------------------------------------------------------------------#
+#                                     RULES                                    #
+#------------------------------------------------------------------------------#
+
+# Make
+all: $(NAME)
+
+# Linking *.o to create library
+$(NAME): $(OBJS) $(LIBFT)
+	cp $(LIBFT) $(NAME) # Copies libft.a to the root directorie with the name libftprint.a
+	$(AR) $(NAME) $(OBJS) # Include all *.o files inside the libftprintf.a, where there are all libft *.o files
+
+# Compiling *.c files to *.o files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compilación de libft
+$(LIBFT): 
+	make -C $(LIBFT_DIR)
+
+# Removing all *.o files
+clean: 
+	$(RM) $(OBJS)
+	make clean -C $(LIBFT_DIR)
+
+# Removing all, libftprintf.a and *.o files
+fclean: clean
+	$(RM) $(NAME)
+	make fclean -C $(LIBFT_DIR)
+
+# Cleans and recompiles everything
+re: fclean all
+
+# PHONY commands
+.PHONY: all clean fclean re
