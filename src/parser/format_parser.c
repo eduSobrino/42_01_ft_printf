@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 18:53:20 by esobrino          #+#    #+#             */
-/*   Updated: 2026/02/24 20:48:17 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/09 22:01:50 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ char	*format_parser(char *format, t_format *curr_format)
 
 char	*get_flags(char *format, t_format *curr_format)
 {
-	char	flags[6] = "-0# +";
+# define FLAG_LIST(c, f) c, 
+	static const char	all_flags = { LIST_FLAGS 0 };
+# undef FLAG_LIST
 
 	while (ft_strchr(flags, *format) && *format != '\0')
 	{
@@ -65,7 +67,7 @@ char	*get_precision(char *format, t_format *curr_format)
 {
 	if (*format == '.')
 	{
-		curr_format->flag_dot = true;
+		curr_format->flags |= F_DOT;
 		format++;
 		while (*format >= '0' && *format <= '9')
 		{
@@ -78,7 +80,9 @@ char	*get_precision(char *format, t_format *curr_format)
 
 char	*get_specifier(char *format, t_format *curr_format)
 {
-	char	specifiers[10] = "cspdiuxX%";
+# define MAPPER(c, f) c, 
+	static const char	specifiers[] = {SPECIFIERS_LIST 0};
+#undef MAPPER
 
 	if (ft_strchr(specifiers, *format))
 	{

@@ -6,34 +6,30 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 11:44:29 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/04 21:23:45 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/09 21:00:05 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFTPRINTF_H
 # define LIBFTPRINTF_H
 
+# include "ft_printf_config.h" 
+# include "libft.h" 
 # include <stdlib.h>
 # include <stdio.h> // for debugging
 # include <unistd.h>
 # include <stdbool.h>
 # include <stdarg.h>
-# include "libft.h" 
 
 /* -------------STRUCTURES--------------------------------------------------- */
 typedef struct	s_format
 {
-	bool		flag_minus;
-	bool		flag_zeros;
-	bool		flag_dot;
-	bool		flag_plus;
-	bool		flag_hash;
-	bool		flag_space;
-	size_t		width;
-	size_t		precision;
-	char		specifier;
-	size_t		len;
-}				t_format;
+	unsigned char	flags;
+	size_t			width;
+	size_t			precision;
+	char			specifier;
+	size_t			len;
+}	t_format;
 
 typedef struct	s_linker
 {
