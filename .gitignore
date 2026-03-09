@@ -1,0 +1,28 @@
+# Ejecutables
+*.out
+*.exe
+main
+
+# Archivos objeto
+*.o
+
+# Librerías
+*.a
+*.so
+
+# Archivos temporales
+*.log
+*.swp
+*~
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Tester files (si no quieres subirlos)
+tester/
+
+# Trash files (si no quieres subirlos)
+trash/
