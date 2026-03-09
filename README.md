@@ -52,3 +52,21 @@ https://cplusplus.com/reference/cstdio/printf/
 
 Calculadora de conversión de base para desarrollar y comparar ft_dectobase.c
 https://www.rapidtables.com/convert/number/index.html
+
+## Hoja de Ruta Ninja (Próximos Pasos)
+
+Para elevar la calidad del código, se están implementando los siguientes conceptos de ingeniería de software:
+
+1.  **[ ] Fase 1: Arquitectura de Configuración (X-Macros)**
+    *   Centralizar specifiers y flags en `ft_printf_config.h`.
+    *   Usar macros para autogenerar la tabla de handlers y los strings de búsqueda.
+2.  **[ ] Fase 2: Optimización de Datos (Bitmasks)**
+    *   Sustituir booleanos en `t_format` por una bitmask de 8 bits.
+    *   Implementar validación de flags con operadores bitwise (`&`, `|`, `~`).
+3.  **[ ] Fase 3: Acceso Directo (Lookup Table ASCII)**
+    *   Convertir el selector en una tabla indexada $O(1)$ usando el valor ASCII de los caracteres.
+4.  **[ ] Fase 4: Contador y Encapsulación (Contexto)**
+    *   Crear una estructura `t_printf` que agrupe `va_list`, `t_format` y el acumulador de bytes.
+    *   Implementar el retorno correcto del número de caracteres impresos.
+5.  **[ ] Fase 5 (Bonus): Buffering de Impresión**
+    *   Implementar un buffer interno para minimizar las llamadas a `write(1, ...)`.
