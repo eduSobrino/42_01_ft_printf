@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:07:34 by esobrino          #+#    #+#             */
-/*   Updated: 2026/02/27 00:17:25 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/10 21:31:58 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 void	print_str(char *s, t_format *format);
 void	put_nstr(char *s, size_t n);
 
-void	printer_s(va_list *args, t_format *format)
+void	printer_s(t_context *ctx)
 {
 	char	*s;
 
-	s = va_arg(*args, char *);
-	format->len = ft_strlen(s);
-	if (format->precision < format->len)
-		format->len = format->precision;
-	print_str(s, format);
+	s = va_arg(ctx->args, char *);
+	ctx->fmt.len = ft_strlen(s);
+	if (ctx->fmt.precision < ctx->fmt.len)
+		ctx->fmt.len = ctx->fmt.precision;
+	print_str(s, &ctx->fmt);
 }
 
 void	print_str(char *s, t_format *format)
