@@ -6,7 +6,7 @@
 #    By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:33:18 by esobrino          #+#    #+#              #
-#    Updated: 2026/03/12 22:16:45 by esobrino         ###   ########.fr        #
+#    Updated: 2026/03/14 20:37:41 by esobrino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #------------------------------------------------------------------------------#
@@ -53,9 +53,12 @@ SRCS = \
 	$(SRC_DIR)/ft_printf.c \
 	$(SRC_DIR)/parser/format_parser.c \
 	$(SRC_DIR)/parser/init_format.c \
+	$(SRC_DIR)/dispatcher/get_spec_table.c \
 	$(SRC_DIR)/dispatcher/handler_selector.c \
 	$(SRC_DIR)/dispatcher/priority_rules.c \
-	$(SRC_DIR)/utils/n_printer.c \
+	$(SRC_DIR)/utils/number_printer.c \
+	$(SRC_DIR)/utils/text_printer.c \
+	$(SRC_DIR)/utils/writers.c \
 	$(SRC_DIR)/handler/handler_c.c \
 	$(SRC_DIR)/handler/handler_di.c \
 	$(SRC_DIR)/handler/handler_p.c \
@@ -63,7 +66,6 @@ SRCS = \
 	$(SRC_DIR)/handler/handler_u.c \
 	$(SRC_DIR)/handler/handler_x.c \
 	$(SRC_DIR)/handler/handler_percent.c \
-	$(SRC_DIR)/utils/utils.c \
  
 
 # Object files 

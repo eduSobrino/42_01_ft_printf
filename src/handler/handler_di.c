@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 18:11:59 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/12 22:20:59 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/14 20:13:41 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ void	handler_di(t_context *ctx)
 	}
 	num.prefix = "\0";
 	num.value = di;
-	n_printer(ctx, num);
+	number_printer(ctx, num);
 }

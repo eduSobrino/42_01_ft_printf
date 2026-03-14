@@ -6,41 +6,38 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:15:17 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/12 21:19:38 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/14 19:58:57 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+# include "libftprintf.h"
 
 int ft_printf(const char *format, ...)
 {
 	t_context	ctx;
+	const char	*parser_start;
 
-	t_specifier	specifier_table[] = 
-	{
-		{'c', handler_c, F_MINUS}, 
-		{'s', handler_s, F_MINUS | F_DOT}, 
-		{'p', handler_p, F_MINUS}, 
-		{'d', handler_di, F_MINUS | F_ZERO | F_DOT | F_PLUS | F_SPACE}, 
-		{'i', handler_di, F_MINUS | F_ZERO | F_DOT | F_PLUS | F_SPACE}, 
-		{'u', handler_u, F_MINUS | F_ZERO | F_DOT}, 
-		{'x', handler_x, F_MINUS | F_ZERO | F_DOT | F_HASH}, 
-		{'X', handler_x, F_MINUS | F_ZERO | F_DOT | F_HASH},
-		{'%', handler_percent, 0} 
-	};
 	ctx.total_len = 0;
 	va_start(ctx.args, format); 
 	while (*format)
 	{
+		parser_start = format;
 		if (*format == '%')
 		{
 			init_format(&ctx.fmt);
-			format = format_parser((char *)(format + 1), &ctx.fmt);
-			handler_selector(&ctx, specifier_table);
+			format = format_parser((format + 1), &ctx.fmt);
+			if (!ctx.fmt.specifier)
+			{
+				format = parser_start;
+				pf_putchar(&ctx, *format);
+				format++;
+			}
+			else 
+				handler_selector(&ctx);
 		}
 		else
 		{
-			ft_putchar_fd(*format, 1);
+			pf_putchar(&ctx, *format);
 			format++;
 		}
 	}

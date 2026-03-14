@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 11:44:29 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/12 22:16:05 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/14 20:50:22 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdarg.h>
 # include "libft.h"
 
+# define FP_FLAGS	"-0# +"
+# define FP_DOT		'.'
 # define F_MINUS	1
 # define F_ZERO		2
 # define F_HASH		4
@@ -37,7 +39,6 @@ typedef struct		s_format
 	size_t			width;
 	size_t			precision;
 	char			specifier;
-	size_t			len;
 }					t_format;
 
 typedef struct		s_context
@@ -62,16 +63,22 @@ typedef struct		s_numfmt
 	char			*prefix;
 }					t_numfmt;
 
+typedef struct		s_txtfmt
+{
+	char			*value;
+}					t_txtfmt;
+
 /* -----MAIN----------------------------------------------------------------- */
 int		ft_printf(const char *format, ...);
 
 /* -----PARSER--------------------------------------------------------------- */
-void	init_format(t_format *fmt);
-char   	*format_parser(char *format, t_format *curr_format);
+void		init_format(t_format *fmt);
+const char	*format_parser(const char *format, t_format *fmt);
 
 /* -----DISPATCHER----------------------------------------------------------- */
-void	handler_selector(t_context *ctx, t_specifier *table);
-void    priority_rules(t_format *fmt);
+const t_specifier   *get_spec_table(void);
+void				handler_selector(t_context *ctx);
+void    			priority_rules(t_format *fmt);
 
 /* -----HANDLER-------------------------------------------------------------- */
 void	handler_c(t_context *ctx);
@@ -83,11 +90,10 @@ void	handler_x(t_context *ctx);
 void	handler_percent(t_context *ctx);
 
 /* -----UTILS---------------------------------------------------------------- */
-size_t  get_nbaselen(unsigned long decimal, size_t base);
-void	put_precision(t_format *fmt);
-void   	padding(size_t width, size_t len, char flag);
-void    ft_putnchar(char c, int n);
-void    ft_putnbr_base(unsigned long n, char *digits);
-void    n_printer(t_context *ctx, t_numfmt num);
+void    text_printer(t_context *ctx, const char *buf, size_t len);
+void    number_printer(t_context *ctx, t_numfmt num);
+void	pf_putchar(t_context *ctx, char c);
+void	pf_putnchar(t_context *ctx, char c, size_t n);
+void	pf_putstrn(t_context *ctx, const char *s, size_t n);
 
 #endif

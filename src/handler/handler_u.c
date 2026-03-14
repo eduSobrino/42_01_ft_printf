@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 18:42:48 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/12 22:23:01 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/14 20:14:08 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ void	handler_u(t_context *ctx)
 	num.sign = "\0";
 	num.prefix = "\0";
 	num.value = u;
-	n_printer(ctx, num);
+	number_printer(ctx, num);
 }

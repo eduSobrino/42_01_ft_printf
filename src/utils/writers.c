@@ -1,33 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handler_selector.c                                 :+:      :+:    :+:   */
+/*   writers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/22 13:46:24 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 17:51:08 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/14 18:28:49 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/14 19:59:31 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-void	handler_selector(t_context *ctx)
+void	pf_putchar(t_context *ctx, char c)
 {
-	const t_specifier	*g_spec_table;
-	int					i;
+	ssize_t	w;
 
-	g_spec_table = get_spec_table();
-	i = 0;
-	while (g_spec_table[i].specifier)
+	w = write(1, &c, 1);
+	if (w > 0)
+		ctx->total_len += w;
+}
+
+void	pf_putnchar(t_context *ctx, char c, size_t n)
+{
+	ssize_t	w;
+
+	while (n > 0)
 	{
-		if (g_spec_table[i].specifier == ctx->fmt.specifier)
-		{
-			ctx->fmt.flags &= g_spec_table[i].allowed_flags;
-			priority_rules(&ctx->fmt);
-			g_spec_table[i].handler(ctx);
+		w = write(1, &c, 1);
+		if (w < 1)
 			return ;
-		}
+		ctx->total_len += w;
+		n--;
+	}
+}
+
+void	pf_putstrn(t_context *ctx, const char *s, size_t n)
+{
+	ssize_t	w;
+	size_t	i;
+
+	i = 0;
+	while (s && i < n)
+	{
+		w = write(1, s + i, 1);
+		if (w < 1)
+			return ;
+		ctx->total_len += w;
 		i++;
 	}
 }

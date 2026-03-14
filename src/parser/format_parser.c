@@ -6,84 +6,88 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 18:53:20 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/12 08:27:10 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/14 18:08:11 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-char	*get_flags(char *format, t_format *curr_format);
-char	*get_width(char *format, t_format *curr_format);
-char	*get_precision(char *format, t_format *curr_format);
-char	*get_specifier(char *format, t_format *curr_format);
+const char	*get_flags(const char *format, t_format *fmt);
+const char	*get_width(const char *format, t_format *fmt);
+const char	*get_precision(const char *format, t_format *fmt);
+const char	*get_specifier(const char *format, t_format *fmt);
 
-char	*format_parser(char *format, t_format *curr_format)
+const char	*format_parser(const char *format, t_format *fmt)
 {
-	// Get [flag]
-	format = get_flags(format, curr_format);
-	// Get [width] 
-	format = get_width(format, curr_format);
-	// Get .[precision]
-	format = get_precision(format, curr_format);
-	// Get Specifier
-	format = get_specifier(format, curr_format);
+	format = get_flags(format, fmt);
+	format = get_width(format, fmt);
+	format = get_precision(format, fmt);
+	format = get_specifier(format, fmt);
 	return (format);
 }
 
-char	*get_flags(char *format, t_format *curr_format)
+const char	*get_flags(const char *format, t_format *fmt)
 {
-	char	flags[6] = "-0# +";
-
-	while (ft_strchr(flags, *format) && *format != '\0')
+	while (ft_strchr(FP_FLAGS, *format) && *format != '\0')
 	{
 		if (*format == '-')
-			curr_format->flags |= F_MINUS;
+			fmt->flags |= F_MINUS;
 		else if (*format == '0')
-			curr_format->flags |= F_ZERO;
+			fmt->flags |= F_ZERO;
 		else if (*format == '+')
-			curr_format->flags |= F_PLUS;
+			fmt->flags |= F_PLUS;
 		else if (*format == ' ')
-			curr_format->flags |= F_SPACE;
+			fmt->flags |= F_SPACE;
 		else if (*format == '#')
-			curr_format->flags |= F_HASH;
+			fmt->flags |= F_HASH;
 		format++;
 	}
 	return (format);
 }
 
-char	*get_width(char *format, t_format *curr_format)
+const char	*get_width(const char *format, t_format *fmt)
 {
 	while (*format >= '0' && *format <= '9')
 	{
-		curr_format->width = curr_format->width * 10 + (*format - '0');
+		fmt->width = fmt->width * 10 + (*format - '0');
 		format++;
 	}
 	return (format);
 }
 
-char	*get_precision(char *format, t_format *curr_format)
+const char	*get_precision(const char *format, t_format *fmt)
 {
-	if (*format == '.')
+	if (*format == FP_DOT)
 	{
-		curr_format->flags |= F_DOT;
+		fmt->flags |= F_DOT;
 		format++;
 		while (*format >= '0' && *format <= '9')
 		{
-			curr_format->precision = curr_format->precision * 10 + (*format - '0');
+			fmt->precision = fmt->precision * 10 + (*format - '0');
 			format++;
 		}
 	}
 	return (format);
 }
 
-char	*get_specifier(char *format, t_format *curr_format)
+const char	*get_specifier(const char *format, t_format *fmt)
 {
-	char	specifiers[10] = "cspdiuxX%";
+	const t_specifier	*table;
+	int					i;
 
-	if (ft_strchr(specifiers, *format))
+	if(!*format)
+		return(format);
+	table = get_spec_table();
+	i = 0;
+	while (table[i].specifier)
 	{
-		curr_format->specifier = *format;
-		format++;
+		if (table[i].specifier == *format)
+		{
+			fmt->specifier = *format;
+			format++;
+			return (format);
+		}
+		i++;
 	}
 	return (format);
 }
