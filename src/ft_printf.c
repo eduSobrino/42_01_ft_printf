@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:15:17 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 21:25:54 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/12 21:19:38 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@ int ft_printf(const char *format, ...)
 {
 	t_context	ctx;
 
-	t_linker	specifier_printer_table[] = 
+	t_specifier	specifier_table[] = 
 	{
-		{'c', printer_c}, 
-		{'s', printer_s}, 
-		{'p', printer_p}, 
-		{'d', printer_di}, 
-		{'i', printer_di}, 
-		{'u', printer_u}, 
-		{'x', printer_x}, 
-		{'X', printer_x} 
+		{'c', handler_c, F_MINUS}, 
+		{'s', handler_s, F_MINUS | F_DOT}, 
+		{'p', handler_p, F_MINUS}, 
+		{'d', handler_di, F_MINUS | F_ZERO | F_DOT | F_PLUS | F_SPACE}, 
+		{'i', handler_di, F_MINUS | F_ZERO | F_DOT | F_PLUS | F_SPACE}, 
+		{'u', handler_u, F_MINUS | F_ZERO | F_DOT}, 
+		{'x', handler_x, F_MINUS | F_ZERO | F_DOT | F_HASH}, 
+		{'X', handler_x, F_MINUS | F_ZERO | F_DOT | F_HASH},
+		{'%', handler_percent, 0} 
 	};
 	ctx.total_len = 0;
 	va_start(ctx.args, format); 
@@ -35,7 +36,7 @@ int ft_printf(const char *format, ...)
 		{
 			init_format(&ctx.fmt);
 			format = format_parser((char *)(format + 1), &ctx.fmt);
-			printer_selector(&ctx, specifier_printer_table);
+			handler_selector(&ctx, specifier_table);
 		}
 		else
 		{
@@ -44,5 +45,5 @@ int ft_printf(const char *format, ...)
 		}
 	}
 	va_end(ctx.args);	
-	return (0);
+	return (ctx.total_len);
 }

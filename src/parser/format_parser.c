@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 18:53:20 by esobrino          #+#    #+#             */
-/*   Updated: 2026/02/24 20:48:17 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/12 08:27:10 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ char	*get_flags(char *format, t_format *curr_format)
 	while (ft_strchr(flags, *format) && *format != '\0')
 	{
 		if (*format == '-')
-			curr_format->flag_minus = true;
+			curr_format->flags |= F_MINUS;
 		else if (*format == '0')
-			curr_format->flag_zeros = true;
+			curr_format->flags |= F_ZERO;
 		else if (*format == '+')
-			curr_format->flag_plus = true;
+			curr_format->flags |= F_PLUS;
 		else if (*format == ' ')
-			curr_format->flag_space = true;
+			curr_format->flags |= F_SPACE;
 		else if (*format == '#')
-			curr_format->flag_hash = true;
+			curr_format->flags |= F_HASH;
 		format++;
 	}
 	return (format);
@@ -65,7 +65,7 @@ char	*get_precision(char *format, t_format *curr_format)
 {
 	if (*format == '.')
 	{
-		curr_format->flag_dot = true;
+		curr_format->flags |= F_DOT;
 		format++;
 		while (*format >= '0' && *format <= '9')
 		{

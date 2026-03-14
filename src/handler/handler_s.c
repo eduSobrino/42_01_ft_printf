@@ -1,42 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer_s.c                                        :+:      :+:    :+:   */
+/*   handler_s.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:07:34 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 21:31:58 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/13 10:58:59 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-void	print_str(char *s, t_format *format);
+void	print_str(char *s, t_format *fmt);
 void	put_nstr(char *s, size_t n);
 
-void	printer_s(t_context *ctx)
+void	handler_s(t_context *ctx)
 {
 	char	*s;
 
 	s = va_arg(ctx->args, char *);
+	if (!s)
+		s = "(null)";
 	ctx->fmt.len = ft_strlen(s);
-	if (ctx->fmt.precision < ctx->fmt.len)
+	if (ctx->fmt.flags & F_DOT && ctx->fmt.precision < ctx->fmt.len)
 		ctx->fmt.len = ctx->fmt.precision;
 	print_str(s, &ctx->fmt);
 }
 
-void	print_str(char *s, t_format *format)
+void	print_str(char *s, t_format *fmt)
 {
-	if (format->flag_minus && format->width > format->len)
+	if (fmt->flags & F_MINUS && fmt->width > fmt->len)
 	{
-		put_nstr(s, format->len);
-		padding(format->width, format->len, ' ');
+		put_nstr(s, fmt->len);
+		padding(fmt->width, fmt->len, ' ');
 	}
 	else
 	{
-		padding(format->width, format->len, ' ');
-		put_nstr(s, format->len);
+		padding(fmt->width, fmt->len, ' ');
+		put_nstr(s, fmt->len);
 	}
 }
 

@@ -1,22 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_format.c                                      :+:      :+:    :+:   */
+/*   handler_selector.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/21 14:30:58 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 23:59:54 by esobrino         ###   ########.fr       */
+/*   Created: 2026/02/22 13:46:24 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/12 20:58:03 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-void	init_format(t_format *fmt)
+void	handler_selector(t_context *ctx, t_specifier *table)
 {
-	fmt->flags = 0;
-	fmt->width = 0;
-	fmt->precision = 0;
-	fmt->specifier = '\0';
-	fmt->len = 0;
+	int	i;
+
+	i = 0;
+	while (i < 9)
+	{
+		if (table[i].specifier == ctx->fmt.specifier)
+		{
+			ctx->fmt.flags &= table[i].allowed_flags;
+			priority_rules(&ctx->fmt);
+			table[i].handler(ctx);
+			return ;
+		}
+		i++;
+	}
 }

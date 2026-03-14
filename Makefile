@@ -6,7 +6,7 @@
 #    By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:33:18 by esobrino          #+#    #+#              #
-#    Updated: 2026/02/26 23:50:00 by esobrino         ###   ########.fr        #
+#    Updated: 2026/03/12 22:16:45 by esobrino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #------------------------------------------------------------------------------#
@@ -51,16 +51,19 @@ LIBFT = $(LIBFT_DIR)/libft.a
 # Source files
 SRCS = \
 	$(SRC_DIR)/ft_printf.c \
-	$(SRC_DIR)/handler/printer_c.c \
-	$(SRC_DIR)/handler/printer_di.c \
-	$(SRC_DIR)/handler/printer_p.c \
-	$(SRC_DIR)/handler/printer_s.c \
-	$(SRC_DIR)/handler/printer_selector.c \
-	$(SRC_DIR)/handler/printer_u.c \
-	$(SRC_DIR)/handler/printer_x.c \
 	$(SRC_DIR)/parser/format_parser.c \
 	$(SRC_DIR)/parser/init_format.c \
-	$(SRC_DIR)/utils/utils.c
+	$(SRC_DIR)/dispatcher/handler_selector.c \
+	$(SRC_DIR)/dispatcher/priority_rules.c \
+	$(SRC_DIR)/utils/n_printer.c \
+	$(SRC_DIR)/handler/handler_c.c \
+	$(SRC_DIR)/handler/handler_di.c \
+	$(SRC_DIR)/handler/handler_p.c \
+	$(SRC_DIR)/handler/handler_s.c \
+	$(SRC_DIR)/handler/handler_u.c \
+	$(SRC_DIR)/handler/handler_x.c \
+	$(SRC_DIR)/handler/handler_percent.c \
+	$(SRC_DIR)/utils/utils.c \
  
 
 # Object files 

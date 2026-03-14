@@ -1,27 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer_p.c                                        :+:      :+:    :+:   */
+/*   handler_di.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/25 13:37:56 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 21:31:18 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/12 18:11:59 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/12 22:20:59 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+# include "libftprintf.h"
 
-void	print_hex(unsigned long decimal, t_format *format, size_t len);
-
-void	printer_p(t_context *ctx)
+void	handler_di(t_context *ctx)
 {
-	unsigned long	p;
-	size_t			total_len;
+	long		di;
+	t_numfmt	num;
 
-	p = (unsigned long)va_arg(ctx->args, void *);
-	ctx->fmt.flag_hash = true;
-	ctx->fmt.len = get_nbaselen(p, 16);
-	total_len = ctx->fmt.flag_hash * 2 + ctx->fmt.len;
-	print_hex(p, &ctx->fmt, total_len);
+	di = (long)va_arg(ctx->args, int);
+	num.base = B_DEC;
+	num.sign = "\0";
+	if (di < 0)
+	{
+		num.sign = "-";
+		di = -di;
+	}
+	else
+	{
+		if(ctx->fmt.flags & F_PLUS)
+			num.sign = "+";
+		else if(ctx->fmt.flags & F_SPACE)
+			num.sign = " ";
+	}
+	num.prefix = "\0";
+	num.value = di;
+	n_printer(ctx, num);
 }

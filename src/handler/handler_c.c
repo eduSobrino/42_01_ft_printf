@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer_c.c                                        :+:      :+:    :+:   */
+/*   handler_c.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:00:28 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 21:27:31 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/12 20:56:36 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-void	put_char(char c, t_format *format);
+void	put_char(char c, t_format *fmt);
 
-void	printer_c(t_context *ctx)
+void	handler_c(t_context *ctx)
 {
 	char	c;
 
@@ -23,16 +23,16 @@ void	printer_c(t_context *ctx)
 	put_char(c, &ctx->fmt);
 }
 
-void	put_char(char c, t_format *format)
+void	put_char(char c, t_format *fmt)
 {
-	if (format->flag_minus && format->width > format->len)
+	if (fmt->flags & F_MINUS && fmt->width > fmt->len)
 	{
 		ft_putchar_fd(c, 1);
-		padding(format->width, format->len, ' ');
+		padding(fmt->width, fmt->len, ' ');
 	}
 	else
 	{
-		padding(format->width, format->len, ' ');
+		padding(fmt->width, fmt->len, ' ');
 		ft_putchar_fd(c, 1);
 	}
 }

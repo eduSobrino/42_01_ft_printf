@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_format.c                                      :+:      :+:    :+:   */
+/*   handler_percent.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/21 14:30:58 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 23:59:54 by esobrino         ###   ########.fr       */
+/*   Created: 2026/02/25 13:00:28 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/12 21:16:38 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-void	init_format(t_format *fmt)
+
+void	handler_percent(t_context *ctx)
 {
-	fmt->flags = 0;
-	fmt->width = 0;
-	fmt->precision = 0;
-	fmt->specifier = '\0';
-	fmt->len = 0;
+	ft_putchar_fd(ctx->fmt.specifier, 1);
 }

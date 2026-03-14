@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printer_selector.c                                 :+:      :+:    :+:   */
+/*   handler_u.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/22 13:46:24 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/10 21:37:19 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/12 18:42:48 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/12 22:23:01 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+# include "libftprintf.h"
 
-void	printer_selector(t_context *ctx, t_linker *table)
+void	handler_u(t_context *ctx)
 {
-	int	i;
+	unsigned int	u;
+	t_numfmt		num;
 
-	i = 0;
-	while (i < 8)
-	{
-		if (table[i].specifier == ctx->fmt.specifier)
-		{
-			table[i].handler(ctx);
-			return ;
-		}
-		i++;
-	}
+	u = va_arg(ctx->args, unsigned int);
+	num.base = B_DEC;
+	num.sign = "\0";
+	num.prefix = "\0";
+	num.value = u;
+	n_printer(ctx, num);
 }
