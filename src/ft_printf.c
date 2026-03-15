@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:15:17 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 18:58:04 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/15 23:10:43 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	ft_printf(const char *format, ...)
 	const char	*parser_start;
 
 	ctx.total_len = 0;
+	ctx.error = 0;
 	va_start(ctx.args, format);
-	while (*format)
+	while (*format && !ctx.error)
 	{
 		parser_start = format;
 		if (*format == '%')
@@ -42,5 +43,8 @@ int	ft_printf(const char *format, ...)
 		}
 	}
 	va_end(ctx.args);
-	return (ctx.total_len);
+	if (ctx.error)
+		return (-1);
+	else
+		return ((int)ctx.total_len);
 }

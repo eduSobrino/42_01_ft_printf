@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 11:44:29 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 21:08:59 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/15 23:07:39 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <stdarg.h>
+# include <limits.h>
 # include "libft.h"
 
 # define FP_FLAGS	"-0# +"
@@ -44,6 +45,7 @@ typedef struct s_context
 {
 	va_list			args;
 	size_t			total_len;
+	int				error;
 	t_format		fmt;
 }					t_context;
 
