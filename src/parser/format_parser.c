@@ -6,16 +6,16 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 18:53:20 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 18:08:11 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/15 20:08:19 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-const char	*get_flags(const char *format, t_format *fmt);
-const char	*get_width(const char *format, t_format *fmt);
-const char	*get_precision(const char *format, t_format *fmt);
-const char	*get_specifier(const char *format, t_format *fmt);
+static const char	*get_flags(const char *format, t_format *fmt);
+static const char	*get_width(const char *format, t_format *fmt);
+static const char	*get_precision(const char *format, t_format *fmt);
+static const char	*get_specifier(const char *format, t_format *fmt);
 
 const char	*format_parser(const char *format, t_format *fmt)
 {
@@ -26,7 +26,7 @@ const char	*format_parser(const char *format, t_format *fmt)
 	return (format);
 }
 
-const char	*get_flags(const char *format, t_format *fmt)
+static const char	*get_flags(const char *format, t_format *fmt)
 {
 	while (ft_strchr(FP_FLAGS, *format) && *format != '\0')
 	{
@@ -45,7 +45,7 @@ const char	*get_flags(const char *format, t_format *fmt)
 	return (format);
 }
 
-const char	*get_width(const char *format, t_format *fmt)
+static const char	*get_width(const char *format, t_format *fmt)
 {
 	while (*format >= '0' && *format <= '9')
 	{
@@ -55,7 +55,7 @@ const char	*get_width(const char *format, t_format *fmt)
 	return (format);
 }
 
-const char	*get_precision(const char *format, t_format *fmt)
+static const char	*get_precision(const char *format, t_format *fmt)
 {
 	if (*format == FP_DOT)
 	{
@@ -70,13 +70,13 @@ const char	*get_precision(const char *format, t_format *fmt)
 	return (format);
 }
 
-const char	*get_specifier(const char *format, t_format *fmt)
+static const char	*get_specifier(const char *format, t_format *fmt)
 {
 	const t_specifier	*table;
 	int					i;
 
-	if(!*format)
-		return(format);
+	if (!*format)
+		return (format);
 	table = get_spec_table();
 	i = 0;
 	while (table[i].specifier)

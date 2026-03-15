@@ -6,11 +6,11 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 18:11:59 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 20:13:41 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/15 19:04:59 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libftprintf.h"
+#include "libftprintf.h"
 
 void	handler_di(t_context *ctx)
 {
@@ -27,9 +27,9 @@ void	handler_di(t_context *ctx)
 	}
 	else
 	{
-		if(ctx->fmt.flags & F_PLUS)
+		if (ctx->fmt.flags & F_PLUS)
 			num.sign = "+";
-		else if(ctx->fmt.flags & F_SPACE)
+		else if (ctx->fmt.flags & F_SPACE)
 			num.sign = " ";
 	}
 	num.prefix = "\0";

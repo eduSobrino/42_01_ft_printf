@@ -6,7 +6,7 @@
 #    By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 14:33:18 by esobrino          #+#    #+#              #
-#    Updated: 2026/03/14 20:37:41 by esobrino         ###   ########.fr        #
+#    Updated: 2026/03/15 21:03:20 by esobrino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #------------------------------------------------------------------------------#
@@ -26,6 +26,11 @@ AR = ar -rcs
 
 # Command to remove files
 RM = rm -f
+
+# Test (optional, outside mandatory flow)
+TEST_SRC = main.c
+TEST_BIN = main.out
+TEST_INCLUDES = -I. -I$(LIBFT_DIR)
 
 #------------------------------------------------------------------------------#
 #                                  DIRECTORIES                                 #
@@ -103,7 +108,18 @@ fclean: clean
 	make fclean -C $(LIBFT_DIR)
 
 # Cleans and recompiles everything
-re: fclean all
+re: fclean all	 
+
+# Compiles main.c for testing 
+$(TEST_BIN): $(TEST_SRC) $(NAME)
+	$(CC) $(CFLAGS) $(TEST_INCLUDES) $(TEST_SRC) -L. -lftprintf -o $(TEST_BIN)
+
+test: $(TEST_BIN)
+	./$(TEST_BIN)
+
+# Cleans main.out
+test_clean:
+	$(RM) $(TEST_BIN)
 
 # PHONY commands
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test test_clean

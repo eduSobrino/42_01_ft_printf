@@ -6,11 +6,11 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 18:25:00 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 20:14:18 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/15 19:05:26 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libftprintf.h"
+#include "libftprintf.h"
 
 void	handler_x(t_context *ctx)
 {

@@ -6,7 +6,7 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 11:44:29 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 20:50:22 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/15 21:08:59 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define LIBFTPRINTF_H
 
 # include <stdlib.h>
-# include <stdio.h> // for debugging
 # include <unistd.h>
 # include <stdbool.h>
 # include <stdarg.h>
@@ -33,7 +32,7 @@
 # define B_HEX_UPP "0123456789ABCDEF"
 
 /* -------------STRUCTURES--------------------------------------------------- */
-typedef struct		s_format
+typedef struct s_format
 {
 	unsigned char	flags;
 	size_t			width;
@@ -41,21 +40,21 @@ typedef struct		s_format
 	char			specifier;
 }					t_format;
 
-typedef struct		s_context
+typedef struct s_context
 {
 	va_list			args;
 	size_t			total_len;
 	t_format		fmt;
 }					t_context;
 
-typedef struct		s_specifier
+typedef struct s_specifier
 {
 	char			specifier;
 	void			(*handler)(t_context *ctx);
 	unsigned char	allowed_flags;
 }					t_specifier;
 
-typedef struct		s_numfmt
+typedef struct s_numfmt
 {
 	unsigned long	value;
 	char			*base;
@@ -63,37 +62,32 @@ typedef struct		s_numfmt
 	char			*prefix;
 }					t_numfmt;
 
-typedef struct		s_txtfmt
-{
-	char			*value;
-}					t_txtfmt;
-
 /* -----MAIN----------------------------------------------------------------- */
-int		ft_printf(const char *format, ...);
+int					ft_printf(const char *format, ...);
 
 /* -----PARSER--------------------------------------------------------------- */
-void		init_format(t_format *fmt);
-const char	*format_parser(const char *format, t_format *fmt);
+void				init_format(t_format *fmt);
+const char			*format_parser(const char *format, t_format *fmt);
 
 /* -----DISPATCHER----------------------------------------------------------- */
-const t_specifier   *get_spec_table(void);
+const t_specifier	*get_spec_table(void);
 void				handler_selector(t_context *ctx);
-void    			priority_rules(t_format *fmt);
+void				priority_rules(t_format *fmt);
 
 /* -----HANDLER-------------------------------------------------------------- */
-void	handler_c(t_context *ctx);
-void	handler_s(t_context *ctx);
-void	handler_p(t_context *ctx);
-void	handler_di(t_context *ctx);
-void	handler_u(t_context *ctx);
-void	handler_x(t_context *ctx);
-void	handler_percent(t_context *ctx);
+void				handler_c(t_context *ctx);
+void				handler_s(t_context *ctx);
+void				handler_p(t_context *ctx);
+void				handler_di(t_context *ctx);
+void				handler_u(t_context *ctx);
+void				handler_x(t_context *ctx);
+void				handler_percent(t_context *ctx);
 
 /* -----UTILS---------------------------------------------------------------- */
-void    text_printer(t_context *ctx, const char *buf, size_t len);
-void    number_printer(t_context *ctx, t_numfmt num);
-void	pf_putchar(t_context *ctx, char c);
-void	pf_putnchar(t_context *ctx, char c, size_t n);
-void	pf_putstrn(t_context *ctx, const char *s, size_t n);
+void				text_printer(t_context *ctx, const char *buf, size_t len);
+void				number_printer(t_context *ctx, t_numfmt num);
+void				pf_putchar(t_context *ctx, char c);
+void				pf_putnchar(t_context *ctx, char c, size_t n);
+void				pf_putstrn(t_context *ctx, const char *s, size_t n);
 
 #endif
