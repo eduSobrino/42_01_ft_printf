@@ -6,11 +6,12 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/14 17:37:20 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 17:37:47 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:58:01 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include "spec_table.h"
 
 const t_specifier	*get_spec_table(void)
 {

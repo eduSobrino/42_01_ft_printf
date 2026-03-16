@@ -6,11 +6,12 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 18:11:59 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 19:04:59 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:38:54 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include "num_fmt.h"
 
 void	handler_di(t_context *ctx)
 {

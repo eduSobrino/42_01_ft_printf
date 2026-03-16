@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   number_printer_lengths.h                           :+:      :+:    :+:   */
+/*   num_fmt.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/15 20:44:25 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 20:45:25 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/16 20:36:53 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/16 20:51:57 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NUMBER_PRINTER_LENGTHS_H
-# define NUMBER_PRINTER_LENGTHS_H
+#ifndef NUM_FMT_H
+# define NUM_FMT_H
 
-typedef struct s_lengths
+# include "libftprintf.h"
+
+typedef struct s_numfmt
 {
-	size_t		core_len;
-	size_t		digits_len;
-	size_t		prec_zeros;
-	size_t		pad_len;
-}				t_lengths;
+	unsigned long	value;
+	char			*base;
+	char			*sign;
+	char			*prefix;
+}					t_numfmt;
+
+void	number_printer(t_context *ctx, t_numfmt num);
 
 #endif

@@ -6,11 +6,13 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 18:53:20 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 20:08:19 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:58:42 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include "parse_number_sat.h"
+#include "spec_table.h"
 
 static const char	*get_flags(const char *format, t_format *fmt);
 static const char	*get_width(const char *format, t_format *fmt);
@@ -47,11 +49,7 @@ static const char	*get_flags(const char *format, t_format *fmt)
 
 static const char	*get_width(const char *format, t_format *fmt)
 {
-	while (*format >= '0' && *format <= '9')
-	{
-		fmt->width = fmt->width * 10 + (*format - '0');
-		format++;
-	}
+	fmt->width = parse_number_sat(&format);
 	return (format);
 }
 
@@ -61,11 +59,7 @@ static const char	*get_precision(const char *format, t_format *fmt)
 	{
 		fmt->flags |= F_DOT;
 		format++;
-		while (*format >= '0' && *format <= '9')
-		{
-			fmt->precision = fmt->precision * 10 + (*format - '0');
-			format++;
-		}
+		fmt->precision = parse_number_sat(&format);
 	}
 	return (format);
 }

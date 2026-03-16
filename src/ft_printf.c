@@ -6,45 +6,68 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:15:17 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 23:10:43 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:59:55 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
+static void			init_context(t_context *ctx);
+static const char	*process_token(t_context *ctx, const char *f);
+static int			end_printer(t_context *ctx);
+
 int	ft_printf(const char *format, ...)
 {
 	t_context	ctx;
-	const char	*parser_start;
 
-	ctx.total_len = 0;
-	ctx.error = 0;
+	init_context(&ctx);
 	va_start(ctx.args, format);
-	while (*format && !ctx.error)
+	format = process_token(&ctx, format);
+	va_end(ctx.args);
+	return (end_printer(&ctx));
+}
+
+static void	init_context(t_context *ctx)
+{
+	ctx->buff_pos = 0;
+	ctx->total_len = 0;
+	ctx->error = 0;
+}
+
+static const char	*process_token(t_context *ctx, const char *f)
+{
+	const char	*start;
+
+	while (*f && !ctx->error)
 	{
-		parser_start = format;
-		if (*format == '%')
+		start = f;
+		if (*f == '%')
 		{
-			init_format(&ctx.fmt);
-			format = format_parser((format + 1), &ctx.fmt);
-			if (!ctx.fmt.specifier)
+			init_format(&ctx->fmt);
+			f = format_parser((f + 1), &ctx->fmt);
+			if (!ctx->fmt.specifier)
 			{
-				format = parser_start;
-				pf_putchar(&ctx, *format);
-				format++;
+				f = start;
+				buf_char(ctx, *f);
+				f++;
 			}
 			else
-				handler_selector(&ctx);
+				handler_selector(ctx);
 		}
 		else
 		{
-			pf_putchar(&ctx, *format);
-			format++;
+			buf_char(ctx, *f);
+			f++;
 		}
 	}
-	va_end(ctx.args);
-	if (ctx.error)
+	return (f);
+}
+
+static int	end_printer(t_context *ctx)
+{
+	buf_flush(ctx);
+	if (ctx->error)
 		return (-1);
 	else
-		return ((int)ctx.total_len);
+		return ((int)ctx->total_len);
 }

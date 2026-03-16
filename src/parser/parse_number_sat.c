@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handler_p.c                                        :+:      :+:    :+:   */
+/*   parse_number_sat.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/12 18:25:00 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/16 20:39:02 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/16 20:02:57 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/16 20:03:18 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-#include "num_fmt.h"
+#include <limits.h>
+#include "parse_number_sat.h"
 
-#define P_NULL "(nil)"
-
-void	handler_p(t_context *ctx)
+size_t	parse_number_sat(const char **p)
 {
-	unsigned long	p;
-	t_numfmt		num;
+	size_t	n;
+	size_t	d;
 
-	p = (unsigned long)va_arg(ctx->args, void *);
-	if (!p)
+	n = 0;
+	while (**p >= '0' && **p <= '9')
 	{
-		text_printer(ctx, P_NULL, ft_strlen(P_NULL));
-		return ;
+		d = (size_t)(**p - '0');
+		if (n > ((size_t)INT_MAX - d) / 10)
+			n = INT_MAX;
+		else
+			n = n * 10 + d;
+		(*p)++;
 	}
-	num.base = B_HEX_LOW;
-	num.prefix = "0x";
-	num.sign = "\0";
-	num.value = p;
-	number_printer(ctx, num);
+	return (n);
 }

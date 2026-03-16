@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handler_p.c                                        :+:      :+:    :+:   */
+/*   parse_number_sat.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/12 18:25:00 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/16 20:39:02 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/16 21:15:00 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/16 21:15:00 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-#include "num_fmt.h"
+#ifndef PARSE_NUMBER_SAT_H
+# define PARSE_NUMBER_SAT_H
 
-#define P_NULL "(nil)"
+# include <stddef.h>
 
-void	handler_p(t_context *ctx)
-{
-	unsigned long	p;
-	t_numfmt		num;
+size_t	parse_number_sat(const char **p);
 
-	p = (unsigned long)va_arg(ctx->args, void *);
-	if (!p)
-	{
-		text_printer(ctx, P_NULL, ft_strlen(P_NULL));
-		return ;
-	}
-	num.base = B_HEX_LOW;
-	num.prefix = "0x";
-	num.sign = "\0";
-	num.value = p;
-	number_printer(ctx, num);
-}
+#endif

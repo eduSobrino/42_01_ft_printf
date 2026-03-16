@@ -6,12 +6,13 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/12 18:54:00 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/15 20:48:34 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:51:25 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 #include "number_printer_lengths.h"
+#include "num_fmt.h"
 
 static t_lengths	get_lengths(t_context *ctx, t_numfmt num);
 static size_t		get_nbaselen(unsigned long decimal, size_t base);
@@ -25,20 +26,20 @@ void	number_printer(t_context *ctx, t_numfmt num)
 	l = get_lengths(ctx, num);
 	if (!(ctx->fmt.flags & F_MINUS)
 		&& !(ctx->fmt.flags & F_ZERO) && l.pad_len > 0)
-		pf_putnchar(ctx, ' ', l.pad_len);
+		buf_nchar(ctx, ' ', l.pad_len);
 	if (num.sign)
-		pf_putstrn(ctx, num.sign, ft_strlen(num.sign));
+		buf_strn(ctx, num.sign, ft_strlen(num.sign));
 	if (num.prefix)
-		pf_putstrn(ctx, num.prefix, ft_strlen(num.prefix));
+		buf_strn(ctx, num.prefix, ft_strlen(num.prefix));
 	if (ctx->fmt.flags & F_ZERO && l.pad_len > 0)
-		pf_putnchar(ctx, '0', l.pad_len);
+		buf_nchar(ctx, '0', l.pad_len);
 	if (ctx->fmt.flags & F_DOT)
-		pf_putnchar(ctx, '0', l.prec_zeros);
+		buf_nchar(ctx, '0', l.prec_zeros);
 	if (!((ctx->fmt.flags & F_DOT)
 			&& ctx->fmt.precision == 0 && num.value == 0))
 		ft_putnbr_base(ctx, num.value, num.base);
 	if (ctx->fmt.flags & F_MINUS && l.pad_len > 0)
-		pf_putnchar(ctx, ' ', l.pad_len);
+		buf_nchar(ctx, ' ', l.pad_len);
 }
 
 static t_lengths	get_lengths(t_context *ctx, t_numfmt num)
@@ -84,5 +85,5 @@ static void	ft_putnbr_base(t_context *ctx, unsigned long n, char *digits)
 	mod = n % base;
 	if (n >= base)
 		ft_putnbr_base(ctx, n / base, digits);
-	pf_putchar(ctx, digits[mod]);
+	buf_char(ctx, digits[mod]);
 }

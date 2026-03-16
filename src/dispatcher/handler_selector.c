@@ -6,11 +6,12 @@
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 13:46:24 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/14 17:51:08 by esobrino         ###   ########.fr       */
+/*   Updated: 2026/03/16 20:58:23 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include "spec_table.h"
 
 void	handler_selector(t_context *ctx)
 {

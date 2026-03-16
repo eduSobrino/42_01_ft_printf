@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handler_p.c                                        :+:      :+:    :+:   */
+/*   number_printer_lengths.h                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esobrino <esobrino@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/12 18:25:00 by esobrino          #+#    #+#             */
-/*   Updated: 2026/03/16 20:39:02 by esobrino         ###   ########.fr       */
+/*   Created: 2026/03/15 20:44:25 by esobrino          #+#    #+#             */
+/*   Updated: 2026/03/15 20:45:25 by esobrino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-#include "num_fmt.h"
+#ifndef NUMBER_PRINTER_LENGTHS_H
+# define NUMBER_PRINTER_LENGTHS_H
 
-#define P_NULL "(nil)"
+# include <stddef.h>
 
-void	handler_p(t_context *ctx)
+typedef struct s_lengths
 {
-	unsigned long	p;
-	t_numfmt		num;
+	size_t		core_len;
+	size_t		digits_len;
+	size_t		prec_zeros;
+	size_t		pad_len;
+}				t_lengths;
 
-	p = (unsigned long)va_arg(ctx->args, void *);
-	if (!p)
-	{
-		text_printer(ctx, P_NULL, ft_strlen(P_NULL));
-		return ;
-	}
-	num.base = B_HEX_LOW;
-	num.prefix = "0x";
-	num.sign = "\0";
-	num.value = p;
-	number_printer(ctx, num);
-}
+#endif
