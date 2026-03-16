@@ -1,72 +1,156 @@
-# ft_printf()
+# ft_printf
 
-*Este proyecto ha sido creado como parte del currículo de 42 por esobrino.*
+Implementación de `ft_printf` para el currículo de 42.
 
-## Descrpición
-Escribe una librería que contenga la función ft_printf(), que imite el printf() original.
-prototipo:
+## Objetivo
+Reproducir el comportamiento de `printf` para las conversiones obligatorias:
 
-`int		ft_printf(char const *, ...);`
+- `%c`
+- `%s`
+- `%p`
+- `%d`
+- `%i`
+- `%u`
+- `%x`
+- `%X`
+- `%%`
 
-Introducción a las funciones variádicas.
+Prototipo:
 
-#### Archivos a entregar 
-Makefile, *.h, */*.h, *.c, */*.c
+```c
+int	ft_printf(const char *format, ...);
+```
 
-#### Makefile
-NAME, all, clean, fclean, re
+## Compilación y uso
 
-#### Funciones autorizadas
-libft
-malloc, free, write --> stdlib.h y unsitd.h
-va_start, va_arg, va_copy, va_end --> stdargs.h 
+Compilar librería:
 
-## Instrucciones
+```bash
+make
+```
 
-Se deben incluir las conversiones cspdiuxX%:
+Limpiar objetos:
 
-%specifier | Definition | ----------------------------------------------------> Output example
+```bash
+make clean
+```
 
-c: Characer ------------------------------------------------------------------> a
+Limpiar todo:
 
-s: String of cahracters ------------------------------------------------------> sample
+```bash
+make fclean
+```
 
-p: Pointer of address --------------------------------------------------------> b8000000
+Recompilar:
 
-d: Signed decimal integer ----------------------------------------------------> 392
+```bash
+make re
+```
 
-i: Signed decimal integer ----------------------------------------------------> 392
+Test comparativo (`printf` vs `ft_printf`) usando `main.c`:
 
-u: Unsigned decimal integer --------------------------------------------------> 7235
+```bash
+make test
+```
 
-x: Hexadecimal floating point, lowercase -------------------------------------> 7fa
+Chequeo de norma:
 
-X: Hexadecimal floating point, uppercase -------------------------------------> 7FA
+```bash
+norminette src inc libftprintf.h
+```
 
-%: A % followed by another % character will write a single %to the stream ----> %
+## Arquitectura
 
-## Recursos
+El proyecto está dividido por capas:
 
-Documentación de c standard
-https://cplusplus.com/reference/cstdio/printf/
+- `parser/`
+  - Parseo de flags, width, precision y specifier.
+  - `parse_number_sat.c` evita overflow de parseo saturando a `INT_MAX`.
+- `dispatcher/`
+  - Tabla única de specifiers (`get_spec_table.c`) con:
+    - specifier
+    - handler
+    - flags permitidas
+  - Aplicación de reglas de prioridad de flags.
+- `handler/`
+  - Extraen argumentos (`va_arg`) y preparan la vista del dato.
+- `utils/`
+  - `text_printer.c` y `number_printer.c` construyen salida formateada.
+  - `buffer_manager.c` gestiona buffer de salida y flush a `write`.
 
-Calculadora de conversión de base para desarrollar y comparar ft_dectobase.c
-https://www.rapidtables.com/convert/number/index.html
+## Reglas de diseño aplicadas
 
-## Hoja de Ruta Ninja (Próximos Pasos)
+- Fuente única de verdad para specifiers: `spec_table`.
+- Separación de responsabilidades:
+  - parser parsea
+  - dispatcher selecciona y normaliza
+  - handlers preparan datos
+  - printers renderizan
+  - buffer manager escribe
+- Encapsulación de tipos internos en `inc/`:
+  - `spec_table.h`
+  - `num_fmt.h`
+  - `number_printer_lengths.h`
+  - `parse_number_sat.h`
+- Manejo de errores de runtime:
+  - error de `write` => `ft_printf` retorna `-1`
+  - control de overflow de retorno (`INT_MAX`)
+  - flush final al terminar el procesamiento del formato
 
-Para elevar la calidad del código, se están implementando los siguientes conceptos de ingeniería de software:
+## Flags soportadas
 
-1.  **[ ] Fase 1: Arquitectura de Configuración (X-Macros)**
-    *   Centralizar specifiers y flags en `ft_printf_config.h`.
-    *   Usar macros para autogenerar la tabla de handlers y los strings de búsqueda.
-2.  **[ ] Fase 2: Optimización de Datos (Bitmasks)**
-    *   Sustituir booleanos en `t_format` por una bitmask de 8 bits.
-    *   Implementar validación de flags con operadores bitwise (`&`, `|`, `~`).
-3.  **[ ] Fase 3: Acceso Directo (Lookup Table ASCII)**
-    *   Convertir el selector en una tabla indexada $O(1)$ usando el valor ASCII de los caracteres.
-4.  **[ ] Fase 4: Contador y Encapsulación (Contexto)**
-    *   Crear una estructura `t_printf` que agrupe `va_list`, `t_format` y el acumulador de bytes.
-    *   Implementar el retorno correcto del número de caracteres impresos.
-5.  **[ ] Fase 5 (Bonus): Buffering de Impresión**
-    *   Implementar un buffer interno para minimizar las llamadas a `write(1, ...)`.
+Flags parseadas: `-0# +` y `.` (precisión).  
+La validez final por conversión se controla en la tabla de specifiers + reglas de prioridad.
+
+## Specifier y flags permitidas
+
+| Specifier | Flags permitidas |
+| --- | --- |
+| `%c` | `-` |
+| `%s` | `-` `.` |
+| `%p` | `-` |
+| `%d` `%i` | `-` `0` `.` `+` ` ` |
+| `%u` | `-` `0` `.` |
+| `%x` `%X` | `-` `0` `.` `#` |
+| `%%` | ninguna |
+
+Reglas de prioridad globales:
+
+- `-` desactiva `0`
+- `+` desactiva espacio (` `)
+- `.` desactiva `0` en `%d` `%i` `%u` `%x` `%X`
+
+## Estructura de carpetas
+
+```text
+inc/
+src/
+  parser/
+  dispatcher/
+  handler/
+  utils/
+libftprintf.h
+Makefile
+```
+
+## Notas
+
+- `make test` es un target auxiliar para desarrollo y no forma parte del flujo obligatorio de `all`.
+- La salida se bufferiza para reducir llamadas a `write`.
+
+## Limitaciones conocidas
+
+- No se implementan length modifiers (`hh`, `h`, `l`, `ll`, etc.).
+- No se implementan conversiones de coma flotante (`%f`, `%e`, `%g`, ...).
+- No se implementan `*` en width/precision.
+- Comportamientos fuera de especificación (format inválido o tipos variádicos incorrectos) se consideran fuera de alcance del proyecto.
+- El retorno está limitado por `INT_MAX` (si hay overflow o error de escritura, retorna `-1`).
+
+## Changelog breve
+
+- `v1` implementación funcional base de `cspdiuxX%`.
+- `v2` refactor por capas (`parser`/`dispatcher`/`handler`/`utils`) y tabla única de specifiers.
+- `v3` normalización de flags por máscara y reglas de prioridad.
+- `v4` capa de impresión común (`text_printer` y `number_printer`) con `total_len` consistente.
+- `v5` buffering de salida en `buffer_manager` + manejo robusto de `write`/overflow.
+- `v6` encapsulación de tipos internos en `inc/` (`spec_table`, `num_fmt`, `number_printer_lengths`, `parse_number_sat`).
