@@ -18,6 +18,8 @@ void	buf_char(t_context *ctx, char c)
 		return ;
 	if (ctx->buff_pos >= (size_t)PF_BUF_CAP)
 		buf_flush(ctx);
+	if (ctx->error)
+		return ;
 	ctx->buffer[ctx->buff_pos] = c;
 	ctx->buff_pos++;
 }

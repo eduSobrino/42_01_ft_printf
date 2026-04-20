@@ -13,39 +13,24 @@
 #                                    CONFIG                                    #
 #------------------------------------------------------------------------------#
 
-# Library Name
 NAME = libftprintf.a
 
-# Compilator and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-INCLUDES = -I. -I$(INC_DIR) -I$(LIBFT_DIR)
+CPPFLAGS = -I. -I$(INC_DIR) -I$(LIBFT_DIR) -MMD -MP
 
-# Command to linking *.o files and create the *.a library
-AR = ar -rcs
+AR = ar
+ARFLAGS = -rcs
 
-# Command to remove files
 RM = rm -f
-
-# Test (optional, outside mandatory flow)
-TEST_SRC = main.c
-TEST_BIN = main.out
-TEST_INCLUDES = -I. -I$(LIBFT_DIR) -I$(INC_DIR)
 
 #------------------------------------------------------------------------------#
 #                                  DIRECTORIES                                 #
 #------------------------------------------------------------------------------#
 
-# Source Files Directories
 SRC_DIR = src
-
-# Object Files Direrctorie
 OBJ_DIR = obj
-
-# Header Files Directorie
-INC_DIR = inc 
-
-# libft 
+INC_DIR = inc
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
@@ -53,7 +38,6 @@ LIBFT = $(LIBFT_DIR)/libft.a
 #                                    SOURCES                                   #
 #------------------------------------------------------------------------------#
 
-# Source files
 SRCS = \
 	$(SRC_DIR)/ft_printf.c \
 	$(SRC_DIR)/parser/init_format.c \
@@ -72,55 +56,100 @@ SRCS = \
 	$(SRC_DIR)/handler/handler_u.c \
 	$(SRC_DIR)/handler/handler_x.c \
 	$(SRC_DIR)/handler/handler_percent.c \
- 
 
-# Object files 
-OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS)) 
+LIBFT_SRCS = \
+	ft_isalpha.c \
+	ft_isdigit.c \
+	ft_isalnum.c \
+	ft_isascii.c \
+	ft_isprint.c \
+	ft_toupper.c \
+	ft_tolower.c \
+	ft_atoi.c \
+	ft_strlen.c \
+	ft_strlcpy.c \
+	ft_strlcat.c \
+	ft_strchr.c \
+	ft_strrchr.c \
+	ft_strnstr.c \
+	ft_strncmp.c \
+	ft_strdup.c \
+	ft_memset.c \
+	ft_bzero.c \
+	ft_memcpy.c \
+	ft_memmove.c \
+	ft_memchr.c \
+	ft_memcmp.c \
+	ft_calloc.c \
+	ft_substr.c \
+	ft_strjoin.c \
+	ft_strtrim.c \
+	ft_split.c \
+	ft_itoa.c \
+	ft_strmapi.c \
+	ft_striteri.c \
+	ft_putchar_fd.c \
+	ft_putstr_fd.c \
+	ft_putendl_fd.c \
+	ft_putnbr_fd.c \
+	ft_lstnew.c \
+	ft_lstadd_front.c \
+	ft_lstsize.c \
+	ft_lstlast.c \
+	ft_lstadd_back.c \
+	ft_lstdelone.c \
+	ft_lstclear.c \
+	ft_lstiter.c \
+	ft_lstmap.c
+
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+DEPS = $(OBJS:.o=.d)
+LIBFT_OBJS = $(addprefix $(LIBFT_DIR)/,$(LIBFT_SRCS:.c=.o))
 
 #------------------------------------------------------------------------------#
 #                                     RULES                                    #
 #------------------------------------------------------------------------------#
 
-# Make
 all: $(NAME)
 
-# Linking *.o to create library
 $(NAME): $(OBJS) $(LIBFT)
-	cp $(LIBFT) $(NAME) # Copies libft.a to the root directorie with the name libftprint.a
-	$(AR) $(NAME) $(OBJS) # Include all *.o files inside the libftprintf.a, where there are all libft *.o files
+	$(RM) $@
+	$(AR) $(ARFLAGS) $@ $(LIBFT_OBJS) $(OBJS)
 
-# Compiling *.c files to *.o files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-# Compilación de libft
-$(LIBFT): 
-	make -C $(LIBFT_DIR)
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
-# Removing all *.o files
-clean: 
-	$(RM) $(OBJS)
-	make clean -C $(LIBFT_DIR)
+clean:
+	$(RM) $(OBJS) $(DEPS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
-# Removing all, libftprintf.a and *.o files
 fclean: clean
 	$(RM) $(NAME)
-	make fclean -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
-# Cleans and recompiles everything
-re: fclean all	 
+re: fclean all
 
-# Compiles main.c for testing 
-$(TEST_BIN): $(TEST_SRC) $(NAME)
-	$(CC) $(CFLAGS) $(TEST_INCLUDES) $(TEST_SRC) -L. -lftprintf -o $(TEST_BIN)
+# -----------------------------------------------------------------------------#
+# Optional local tests - keep commented out for submission.
+# Uncomment locally only if you also keep the auxiliary `main.c` outside the
+# deliverable version of the project.
+#
+# TEST_SRC = main.c
+# TEST_BIN = main.out
+#
+# $(TEST_BIN): $(TEST_SRC) $(NAME)
+# 	$(CC) $(CFLAGS) -I. -I$(INC_DIR) -I$(LIBFT_DIR) $(TEST_SRC) -L. -lftprintf -o $(TEST_BIN)
+#
+# test: $(TEST_BIN)
+# 	./$(TEST_BIN)
+#
+# test_clean:
+# 	$(RM) $(TEST_BIN)
 
-test: $(TEST_BIN)
-	./$(TEST_BIN)
+-include $(DEPS)
 
-# Cleans main.out
-test_clean:
-	$(RM) $(TEST_BIN)
-
-# PHONY commands
-.PHONY: all clean fclean re test test_clean
+.PHONY: all clean fclean re

@@ -12,20 +12,18 @@
 #------------------------------------------------------------------------------#
 #                                  VARIABLES                                   #
 #------------------------------------------------------------------------------#
-# Nombre de la libreria
 NAME = libft.a
 
-# Compilador y flags 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
+CFLAGS = -Wall -Wextra -Werror
+CPPFLAGS = -I$(INC_DIR) -MMD -MP
 
-# Comando para crear librerias
-AR = ar -rcs
+AR = ar
+ARFLAGS = -rcs
 
-# Comando para eliminar archivos
 RM = rm -f
+INC_DIR = .
 
-# Archivos fuente 
 SRCS = ft_isalpha.c \
 		ft_isdigit.c \
 		ft_isalnum.c \
@@ -70,36 +68,30 @@ SRCS = ft_isalpha.c \
 		ft_lstiter.c \
 		ft_lstmap.c
 
-# Archivos objeto
 OBJS = $(SRCS:.c=.o)
-
-# Directorio de archivos header
-INC_DIR = .
+DEPS = $(OBJS:.o=.d)
 
 #------------------------------------------------------------------------------#
 #                                     REGLAS                                   #
 #------------------------------------------------------------------------------#
 
-# Regal prncipal
-all: ${NAME}
+all: $(NAME)
 
-# Crear la libreria
 $(NAME): $(OBJS)
-	$(AR) $(NAME) $(OBJS)
+	$(RM) $@
+	$(AR) $(ARFLAGS) $@ $(OBJS)
 
-# Compilar archivos .c a .o
-%.o:%.c 
-	$(CC) $(CFLAGS) -c $< -o $@ 
+%.o: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-# Limpiar archivos .o
-clean: 
-	$(RM) $(OBJS)
+clean:
+	$(RM) $(OBJS) $(DEPS)
 
-# Limpiar archivos .o y libreria
 fclean: clean
 	$(RM) $(NAME)
 
-# Limpiar y recompilar todo
 re: fclean all
+
+-include $(DEPS)
 
 .PHONY: all clean fclean re
